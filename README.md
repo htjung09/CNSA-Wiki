@@ -12,21 +12,28 @@
 여러분도 큰사위키에 참여해서 우리의 이야기를 함께 만들어가요!
 
 ## 👨‍💻개발자 소개
-<div>
-	11130 정형태<br>
-	<a href="https://github.com/htjung09" title="htjung09 on GitHub">
-	  <img src="https://github.com/htjung09.png" width="100" height="100" />
-	</a>
-</div>
-<div>
-	10101 강민재<br>
-	<a href="https://github.com/" title="htjung09 on GitHub">
-	  <img src="https://github.com/.png" width="100" height="100" />
-	</a>
-</div>
-<div>
-	10928 채희서<br>
-	<a href="https://github.com/CHS113" title="htjung09 on GitHub">
-	  <img src="https://github.com/CHS113.png" width="100" height="100" />
-	</a>
-</div>
+<table>
+  <tr>
+	<th>11130 정형태</th>
+	<th>10101 강민재</th>
+	<th>10928 채희서</th>
+  </tr>
+	
+  <tr>
+    <td>
+		<a href="https://github.com/htjung09" title="htjung09 on GitHub">
+			<img src="https://github.com/htjung09.png" width="100" height="100" />
+		</a>
+	</td>
+    <td>
+		<a href="https://github.com/min268" title="강민재 on GitHub">
+			<img src="https://github.com/min268.png" width="100" height="100" />
+		</a>
+	</td>
+    <td>
+		<a href="https://github.com/CHS113" title="CHS113 on GitHub">
+			<img src="https://github.com/CHS113.png" width="100" height="100" />
+		</a>
+	</td>
+  </tr>
+</table>
