@@ -20,13 +20,13 @@
 </div>
 <div>
 	10101 강민재<br>
-	<a href="https://github.com/" title="htjung09 on GitHub">
+	<a href="https://github.com/" title="강민재 on GitHub">
 	  <img src="https://github.com/.png" width="100" height="100" />
 	</a>
 </div>
 <div>
 	10928 채희서<br>
-	<a href="https://github.com/CHS113" title="htjung09 on GitHub">
+	<a href="https://github.com/CHS113" title="CHS113 on GitHub">
 	  <img src="https://github.com/CHS113.png" width="100" height="100" />
 	</a>
 </div>
