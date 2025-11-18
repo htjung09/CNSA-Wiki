@@ -20,8 +20,8 @@
 </div>
 <div>
 	10101 강민재<br>
-	<a href="https://github.com/" title="강민재 on GitHub">
-	  <img src="https://github.com/.png" width="100" height="100" />
+	<a href="https://github.com/min268" title="강민재 on GitHub">
+	  <img src="https://github.com/min268.png" width="100" height="100" />
 	</a>
 </div>
 <div>
