@@ -7,6 +7,10 @@ namespace WikiApi.Data
     {
         public DbSet<UserInfo> Users { get; set; }
 
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+        public AppDbContext(DbContextOptions<AppDbContext> options)    
+            : base(options)
+        {
+
+        }
     }
 }
