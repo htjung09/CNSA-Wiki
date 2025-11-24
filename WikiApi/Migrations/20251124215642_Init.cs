@@ -5,7 +5,7 @@
 namespace WikiApi.Migrations
 {
     /// <inheritdoc />
-    public partial class Wiki : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

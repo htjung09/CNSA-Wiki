@@ -11,8 +11,8 @@ using WikiApi.Data;
 namespace WikiApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251124132044_Wiki")]
-    partial class Wiki
+    [Migration("20251124215642_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -1,4 +1,5 @@
 ﻿using CNSAWiki.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SharedData.DTOs;
@@ -55,6 +56,13 @@ namespace WikiApi.Controllers
             var token = _auth.CreateToken(user);
 
             return Ok(new { token });
+        }
+
+        [Authorize]
+        [HttpGet("me")]
+        public IActionResult Me()
+        {
+            return Ok(new { username = User.Identity.Name });
         }
     }
 }
