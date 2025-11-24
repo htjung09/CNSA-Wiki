@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.20" />
+    <PackageReference Include="Microsoft.SqlServer.Server" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

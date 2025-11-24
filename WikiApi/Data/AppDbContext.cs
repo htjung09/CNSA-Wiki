@@ -5,18 +5,8 @@ namespace WikiApi.Data
 {
     public class AppDbContext : DbContext
     {
-        public DbSet<UserInfo> Users => Set<UserInfo>();
+        public DbSet<UserInfo> Users { get; set; }
 
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-        {
-
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<UserInfo>()
-                .HasIndex(u => u.Username)
-                .IsUnique();
-        }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
     }
 }
