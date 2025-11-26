@@ -1,4 +1,6 @@
 ﻿@inherits LayoutComponentBase
+@using Data;
+@inject AuthService Auth
 
 <PageTitle>CNSAWiki</PageTitle>
 
@@ -9,9 +11,20 @@
 
     <main>
         <div class="top-row px-4">
-            <NavLink class="nav-link" href="login">
-                <button class="btn btn-primary">로그인</button>
-            </NavLink>
+            <p>@Auth.Authorized</p>
+            @if (Auth.Authorized)
+            {
+                <p>@Auth.Username</p>
+            }
+            else
+            {
+                <NavLink class="nav-link" href="register">
+                    <button class="btn btn-primary">회원가입</button>
+                </NavLink>
+                <NavLink class="nav-link" href="login">
+                    <button class="btn btn-primary">로그인</button>
+                </NavLink>
+            }
         </div>
 
         <article class="content px-4">

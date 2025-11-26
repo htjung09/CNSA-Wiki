@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using SharedData.DTOs;
+using System.Security.Claims;
 using WikiApi.Data;
 using WikiApi.Services;
 
@@ -59,11 +60,21 @@ namespace WikiApi.Controllers
             return Ok(new { token });
         }
 
-        [Authorize]
-        [HttpGet("me")]
-        public IActionResult Me()
+        // ⭐ 현재 로그인한 유저 정보 가져오기
+        [HttpGet("myinfo")]
+        [Authorize]  // JWT 인증 필요
+        public IActionResult GetMyInfo()
         {
-            return Ok(new { username = User.Identity.Name });
+            // JWT에서 username 꺼내기
+            var username = User.FindFirst(ClaimTypes.Name)?.Value;
+
+            if (username == null)
+                return Unauthorized();
+
+            return Ok(new
+            {
+                username
+            });
         }
     }
 }

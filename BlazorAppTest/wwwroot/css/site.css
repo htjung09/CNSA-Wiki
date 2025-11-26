@@ -1,12 +1,7 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
-@font-face {
-    font-family: "CookierunFont";
-    src: url("../Fonts/CookieRun Regular.ttf") format('truetype');
-}
-
 html, body {
-    font-family: 'CookierunFont', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 h1:focus {
