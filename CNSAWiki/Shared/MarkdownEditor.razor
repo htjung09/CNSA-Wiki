@@ -5,9 +5,9 @@
     <div class="col-md-6">
         <textarea class="form-control"
                   style="height:350px; white-space:pre-wrap; font-family: monospace;"
-                  @bind="Value"
                   @oninput="OnValueChanged"
-                  placeholder="Markdown 내용을 입력하세요...">
+                  placeholder="문서 내용을 입력하세요...">
+                  @Value
         </textarea>
     </div>
 
@@ -60,6 +60,10 @@
         // 기울임 *
         html = System.Text.RegularExpressions.Regex.Replace(
             html, @"\*(.+?)\*", "<i>$1</i>");
+
+        // 취소선 ~~text~~
+        html = System.Text.RegularExpressions.Regex.Replace(
+            html, @"~~(.+?)~~", "<s>$1</s>");
 
         // 순서 없는 리스트
         html = System.Text.RegularExpressions.Regex.Replace(

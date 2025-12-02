@@ -1,9 +1,47 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+<PageTitle>CNSA Wiki</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="container mt-5">
+    <!-- 헤더 -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold">Welcome to CNSA Wiki</h1>
+        <p class="lead">우리 학교의 모든 정보와 소식을 함께 공유해요!</p>
+    </div>
 
-Welcome to CNSA Wiki.
+    <!-- 정보 카드 영역 -->
+    <div class="row mb-5">
+        <!-- 학교 정보 카드 -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">학교 생활 정보</h5>
+                    <p class="card-text">
+                        시간표, 급식, 동아리 등 학교 생활에 필요한 정보를 확인해보세요.
+                    </p>
+                    <a class="btn btn-primary" href="/school-info">더 알아보기</a>
+                </div>
+            </div>
+        </div>
 
-<SurveyPrompt Title="CNSA Wiki" />
+        <!-- 위키 참여 카드 -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">위키 참여</h5>
+                    <p class="card-text">
+                        여러분의 경험과 정보를 공유하고 위키를 더 풍성하게 만들어보세요.
+                    </p>
+                    <!-- SurveyPrompt 칸 -->
+                    <SurveyPrompt Title="위키 참여하기" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 공지 영역 -->
+    <div class="alert alert-info text-center">
+        <span class="oi oi-info me-2" aria-hidden="true"></span>
+        새로운 소식과 업데이트는 위키 메인에서 확인하세요!
+    </div>
+</div>
