@@ -11,6 +11,7 @@ namespace CNSAWiki.Data
     public class AuthService
     {
         private readonly HttpClient _http;
+        private readonly ILocalStorageService _localStorage;
 
         public bool Authorized { get; private set; } = false;
         public string Username { get; private set; } = string.Empty;
@@ -19,9 +20,10 @@ namespace CNSAWiki.Data
         public event Action? OnChange;
         private void Notify() => OnChange?.Invoke();
 
-        public AuthService(HttpClient http)
+        public AuthService(HttpClient http, ILocalStorageService localStorage)
         {
             _http = http;
+            _localStorage = localStorage;
         }
 
         public void SetToken(string token)
@@ -49,11 +51,39 @@ namespace CNSAWiki.Data
             var result = await response.Content.ReadFromJsonAsync<LoginResult>();
             if (result == null || string.IsNullOrEmpty(result.token)) return false;
 
+            await _localStorage.SetItemAsync("jwt", result.token);
             Username = username ?? "";
 
             SetToken(result.token);
 
             return true;
+        }
+
+        public async Task LogoutAsync()
+        {
+            await _localStorage.RemoveItemAsync("jwt");
+            SetToken("");
+            Username = "";
+        }
+
+        // 새로고침 시 localStorage에서 토큰 읽어서 상태 복원
+        public async Task InitializeAsync()
+        {
+            var token = await _localStorage.GetItemAsync<string>("jwt");
+            if (!string.IsNullOrEmpty(token))
+            {
+                SetToken(token);
+
+                try
+                {
+                    var info = await _http.GetFromJsonAsync<MyInfoResponse>("api/auth/myinfo");
+                    if (info != null) Username = info.username ?? "";
+                }
+                catch
+                {
+                    Username = "";
+                }
+            }
         }
 
         public class LoginResult

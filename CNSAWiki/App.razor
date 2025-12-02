@@ -11,20 +11,3 @@
         </NotFound>
     </Router>
 </CascadingAuthenticationState>
-
-@using Data;
-
-@code {
-    [Inject] private AuthService Auth { get; set; } = default!;
-    bool _initialized = false;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender && !_initialized)
-        {
-            _initialized = true;
-            await Auth.InitializeAsync();
-            StateHasChanged(); // 새로고침 후 UI 즉시 갱신
-        }
-    }
-}

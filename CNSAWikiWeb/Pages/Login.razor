@@ -11,6 +11,7 @@
 <input @bind="password" type="password" placeholder="PW" />
 
 <button @onclick="LoginFunc">Login</button>
+<button @onclick="LogoutFunc">Logout</button>
 
 @if (!string.IsNullOrEmpty(failMessage))
 {
@@ -42,9 +43,15 @@
         StateHasChanged();
     }
 
+    private async Task LogoutFunc()
+    {
+        await Auth.LogoutAsync();
+        StateHasChanged();
+    }
+
     private void GetMyInfo()
     {
-        myInfo = $"내 아이디: {Auth.Username}\nJWT Token: {Auth.JwtToken}";
+        myInfo = $"내 아이디: {Auth.Username}";
         StateHasChanged();
     }
 }

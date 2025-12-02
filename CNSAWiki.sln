@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WikiApi", "WikiApi\WikiApi.
 		{3EF102ED-8DD5-4D7E-9B0C-229DE9A4777B} = {3EF102ED-8DD5-4D7E-9B0C-229DE9A4777B}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorAppTest", "BlazorAppTest\BlazorAppTest.csproj", "{4595DD3E-CF0C-4067-A2A3-8148E713C777}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{D5FE1D14-4F30-4864-B447-8B193CCECD09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5FE1D14-4F30-4864-B447-8B193CCECD09}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5FE1D14-4F30-4864-B447-8B193CCECD09}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4595DD3E-CF0C-4067-A2A3-8148E713C777}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4595DD3E-CF0C-4067-A2A3-8148E713C777}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4595DD3E-CF0C-4067-A2A3-8148E713C777}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4595DD3E-CF0C-4067-A2A3-8148E713C777}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

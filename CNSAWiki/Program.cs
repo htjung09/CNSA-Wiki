@@ -14,10 +14,6 @@ builder.Services.AddHttpClient<AuthService>(client =>
     client.BaseAddress = new Uri("https://localhost:7289/");
 });
 
-// AuthenticationStateProvider µî·Ï
-builder.Services.AddScoped<CustomAuthStateProvider>();
-builder.Services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<CustomAuthStateProvider>());
-
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
