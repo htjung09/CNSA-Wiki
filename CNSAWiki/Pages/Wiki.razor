@@ -1,0 +1,57 @@
+﻿@page "/wiki"
+@inject HttpClient Http
+/(++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++**@using CNSAWiki.Models;
+
+<h2>Wiki Pages</h2>
+
+<button @onclick="CreateNew">새 문서 작성</button>
+
+@if (pages == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <ul>
+    @foreach (var pg in pages)
+    {
+        <li>
+            <a href="/wiki/details/@pg.PageId">@pg.Title</a>
+            <button @onclick="() => EditPage(pg.PageId)">Edit</button>
+            <button @onclick="() => DeletePage(pg.PageId)">Delete</button>
+        </li>
+    }
+    </ul>
+}
+
+@code {
+    private List<WikiPage>? pages;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPages();
+    }
+
+    private async Task LoadPages()
+    {
+        pages = await Http.GetFromJsonAsync<List<WikiPage>>("api/wiki");
+    }
+
+    private void CreateNew()
+    {
+        Navigation.NavigateTo("/wiki/edit/0"); // 0이면 새 문서
+    }
+
+    private void EditPage(long id)
+    {
+        Navigation.NavigateTo($"/wiki/edit/{id}");
+    }
+
+    private async Task DeletePage(long id)
+    {
+        await Http.DeleteAsync($"api/wiki/{id}");
+        await LoadPages();
+    }
+
+    [Inject] NavigationManager Navigation { get; set; } = null!;
+}

@@ -1,18 +1,19 @@
-using Blazored.LocalStorage;
 using CNSAWiki.Data;
-using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddBlazoredLocalStorage();
 
-// AuthService + HttpClient
-builder.Services.AddHttpClient<AuthService>(client =>
+// 공용 HttpClient
+builder.Services.AddScoped(sp => new HttpClient
 {
-    client.BaseAddress = new Uri("https://localhost:7289/");
+    BaseAddress = new Uri("https://localhost:7289/")
 });
+
+// 서비스 등록
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<WikiService>();
 
 var app = builder.Build();
 
