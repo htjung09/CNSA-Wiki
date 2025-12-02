@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WikiApi.Data;
 using CNSAWiki.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WikiApi.Controllers
 {
@@ -35,6 +36,7 @@ namespace WikiApi.Controllers
         }
 
         // POST: api/wiki
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<WikiPage>> CreateWikiPage(WikiPage wikiPage)
         {
@@ -48,6 +50,7 @@ namespace WikiApi.Controllers
         }
 
         // PUT: api/wiki/{id}
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateWikiPage(long id, WikiPage updatedPage)
         {
@@ -67,6 +70,7 @@ namespace WikiApi.Controllers
         }
 
         // DELETE: api/wiki/{id}
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteWikiPage(long id)
         {
