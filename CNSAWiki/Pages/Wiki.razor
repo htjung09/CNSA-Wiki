@@ -1,10 +1,19 @@
 ﻿@page "/wiki"
+@using CNSAWiki.Data;
 @inject HttpClient Http
+@inject AuthService Auth
 @using CNSAWiki.Models;
 
 <h2>Wiki Pages</h2>
 
-<button @onclick="CreateNew">새 문서 작성</button>
+@if (Auth.Authorized)
+{
+    <button @onclick="CreateNew">새 문서 작성</button>
+}
+else
+{
+    <p>글을 작성하려면 로그인 하십시오.</p>
+}
 
 @if (pages == null)
 {
@@ -17,6 +26,7 @@ else
         {
             <li>
                 <a href="/wiki/details/@pg.PageId">@pg.Title</a>
+                @*if (pg.AuthorId == Auth.Id)*@
                 <button @onclick="() => EditPage(pg.PageId)">Edit</button>
                 <button @onclick="() => DeletePage(pg.PageId)">Delete</button>
             </li>

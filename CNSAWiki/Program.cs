@@ -6,14 +6,14 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
 // 공용 HttpClient
-builder.Services.AddScoped(sp => new HttpClient
+builder.Services.AddSingleton(sp => new HttpClient
 {
     BaseAddress = new Uri("https://localhost:7289/")
 });
 
 // 서비스 등록
-builder.Services.AddScoped<AuthService>();
-builder.Services.AddScoped<WikiService>();
+builder.Services.AddSingleton<AuthService>();
+builder.Services.AddSingleton<WikiService>();
 
 var app = builder.Build();
 

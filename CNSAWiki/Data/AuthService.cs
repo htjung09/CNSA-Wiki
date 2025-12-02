@@ -48,7 +48,7 @@ namespace CNSAWiki.Data
 
             var result = await response.Content.ReadFromJsonAsync<LoginResult>();
             if (result == null || string.IsNullOrEmpty(result.token)) return false;
-
+            
             Username = username ?? "";
 
             SetToken(result.token);
