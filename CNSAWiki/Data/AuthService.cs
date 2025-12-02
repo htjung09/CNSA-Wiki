@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Blazored.LocalStorage;
 using Microsoft.JSInterop;
 using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace CNSAWiki.Data
 {
@@ -14,6 +16,7 @@ namespace CNSAWiki.Data
 
         public bool Authorized { get; private set; } = false;
         public string Username { get; private set; } = string.Empty;
+        public long UserId { get; private set; }
         public string JwtToken { get; private set; } = string.Empty;
 
         public event Action? OnChange;
@@ -49,11 +52,24 @@ namespace CNSAWiki.Data
             var result = await response.Content.ReadFromJsonAsync<LoginResult>();
             if (result == null || string.IsNullOrEmpty(result.token)) return false;
             
-            Username = username ?? "";
-
             SetToken(result.token);
+            DecodeToken(result.token);
 
             return true;
+        }
+
+        private void DecodeToken(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jwt = handler.ReadJwtToken(token);
+
+            var userIdClaim = jwt.Claims.FirstOrDefault(c => c.Type == "userId");
+            var userNameClaim = jwt.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name);
+
+            if (userIdClaim != null && long.TryParse(userIdClaim.Value, out var id))
+                UserId = id;
+            if (userNameClaim != null)
+                Username = userNameClaim.Value;
         }
 
         public class LoginResult

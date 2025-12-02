@@ -44,7 +44,7 @@
 
     private void GetMyInfo()
     {
-        myInfo = $"내 아이디: {Auth.Username}\nJWT Token: {Auth.JwtToken}";
+        myInfo = $"내 ID: {Auth.UserId}_{Auth.Username}\nJWT Token: {Auth.JwtToken}";
         StateHasChanged();
     }
 }

@@ -40,6 +40,7 @@ namespace WikiApi.Services
         {
             var claims = new List<Claim>
             {
+                new Claim("userId", user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username)
             };
 
