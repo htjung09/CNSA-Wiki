@@ -27,10 +27,7 @@ else
             <!-- 본문 입력 -->
             <div class="mb-3">
                 <label class="form-label">내용</label>
-                <textarea class="form-control"
-                          style="height: 350px; white-space: pre-wrap;"
-                      @bind="wiki.Content"
-                          placeholder="문서 내용을 입력하세요"></textarea>
+                <MarkdownEditor @bind-Value="wiki.Content" />
             </div>
 
             <!-- 버튼 -->
