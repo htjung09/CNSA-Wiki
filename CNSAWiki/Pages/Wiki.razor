@@ -1,6 +1,6 @@
 ﻿@page "/wiki"
 @inject HttpClient Http
-/(++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++**@using CNSAWiki.Models;
+@using CNSAWiki.Models;
 
 <h2>Wiki Pages</h2>
 
@@ -13,14 +13,14 @@
 else
 {
     <ul>
-    @foreach (var pg in pages)
-    {
-        <li>
-            <a href="/wiki/details/@pg.PageId">@pg.Title</a>
-            <button @onclick="() => EditPage(pg.PageId)">Edit</button>
-            <button @onclick="() => DeletePage(pg.PageId)">Delete</button>
-        </li>
-    }
+        @foreach (var pg in pages)
+        {
+            <li>
+                <a href="/wiki/details/@pg.PageId">@pg.Title</a>
+                <button @onclick="() => EditPage(pg.PageId)">Edit</button>
+                <button @onclick="() => DeletePage(pg.PageId)">Delete</button>
+            </li>
+        }
     </ul>
 }
 
