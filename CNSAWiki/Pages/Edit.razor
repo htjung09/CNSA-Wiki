@@ -1,4 +1,6 @@
 ﻿@page "/wiki/edit/{Id:long}"
+@using CNSAWiki.Data;
+@inject AuthService Auth
 @inject HttpClient Http
 @inject NavigationManager Navigation
 @using CNSAWiki.Models;
@@ -32,6 +34,7 @@ else
 
     private async Task Save()
     {
+        wiki.AuthorId = Auth.UserId;
         if (Id == 0)
         {
             await Http.PostAsJsonAsync("api/wiki", wiki);

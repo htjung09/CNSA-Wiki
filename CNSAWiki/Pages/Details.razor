@@ -1,6 +1,8 @@
 ﻿@page "/wiki/details/{Id:long}"
-@inject HttpClient Http
 @using CNSAWiki.Models;
+@using CNSAWiki.Data;
+@inject AuthService Auth
+@inject HttpClient Http
 
 <h2>@wiki?.Title</h2>
 
@@ -13,7 +15,10 @@ else
     <div>@wiki.Content</div>
     <p>Created: @wiki.CreatedAt.ToLocalTime()</p>
     <p>Updated: @wiki.UpdatedAt.ToLocalTime()</p>
-    <button @onclick="NavToEdit">Edit</button>
+    @if (Auth.Authorized && wiki.AuthorId == Auth.UserId)
+    {
+        <button @onclick="NavToEdit">Edit</button>
+    }
 }
 
 @code {

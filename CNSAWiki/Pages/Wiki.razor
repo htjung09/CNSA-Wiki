@@ -26,9 +26,11 @@ else
         {
             <li>
                 <a href="/wiki/details/@pg.PageId">@pg.Title</a>
-                @*if (pg.AuthorId == Auth.Id)*@
-                <button @onclick="() => EditPage(pg.PageId)">Edit</button>
-                <button @onclick="() => DeletePage(pg.PageId)">Delete</button>
+                @if (pg.AuthorId == Auth.UserId)
+                {
+                    <button @onclick="() => EditPage(pg.PageId)">Edit</button>
+                    <button @onclick="() => DeletePage(pg.PageId)">Delete</button>
+                }
             </li>
         }
     </ul>
