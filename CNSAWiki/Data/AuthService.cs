@@ -7,6 +7,7 @@ using Microsoft.JSInterop;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using SharedData.DTOs;
 
 namespace CNSAWiki.Data
 {
@@ -58,6 +59,29 @@ namespace CNSAWiki.Data
             return true;
         }
 
+        // ⭐ 회원가입
+        public async Task<(bool success, string message)> RegisterAsync(string username, string password)
+        {
+            var dto = new RegisterDto
+            {
+                Username = username,
+                Password = password
+            };
+
+            var response = await _http.PostAsJsonAsync("api/auth/register", dto);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var m = await response.Content.ReadAsStringAsync();
+                return (true, m);
+            }
+            else
+            {
+                var err = await response.Content.ReadAsStringAsync();
+                return (false, err);
+            }
+        }
+
         private void DecodeToken(string token)
         {
             var handler = new JwtSecurityTokenHandler();
@@ -75,11 +99,6 @@ namespace CNSAWiki.Data
         public class LoginResult
         {
             public string token { get; set; } = "";
-            public string? username { get; set; }
-        }
-
-        public class MyInfoResponse
-        {
             public string? username { get; set; }
         }
     }

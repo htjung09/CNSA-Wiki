@@ -1,48 +1,69 @@
 ﻿@page "/wiki/edit/{Id:long}"
-@using CNSAWiki.Data;
+@using CNSAWiki.Data
+@using CNSAWiki.Models
 @inject AuthService Auth
 @inject HttpClient Http
 @inject NavigationManager Navigation
-@using CNSAWiki.Models;
 
-<h2>@(Id == 0 ? "새 문서 작성" : "문서 편집")</h2>
+<h2 class="mb-3">@(Id == 0 ? "📝 새 문서 작성" : "✏ 문서 편집")</h2>
 
 @if (wiki == null)
 {
-    <p>Loading...</p>
+    <div class="alert alert-secondary">Loading...</div>
 }
 else
 {
-    <input @bind="wiki.Title" placeholder="Title" />
-    <textarea @bind="wiki.Content" rows="10" cols="50"></textarea>
-    <button @onclick="Save">Save</button>
-    <button @onclick="Cancel">Cancel</button>
+    <div class="card shadow-sm" style="max-width: 800px;">
+        <div class="card-body">
+
+            <!-- 제목 입력 -->
+            <div class="mb-3">
+                <label class="form-label">제목</label>
+                <input class="form-control"
+                   @bind="wiki.Title"
+                       placeholder="문서 제목을 입력하세요" />
+            </div>
+
+            <!-- 본문 입력 -->
+            <div class="mb-3">
+                <label class="form-label">내용</label>
+                <textarea class="form-control"
+                          style="height: 350px; white-space: pre-wrap;"
+                      @bind="wiki.Content"
+                          placeholder="문서 내용을 입력하세요"></textarea>
+            </div>
+
+            <!-- 버튼 -->
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-secondary me-2" @onclick="Cancel">취소</button>
+                <button class="btn btn-primary" @onclick="Save">저장</button>
+            </div>
+        </div>
+    </div>
 }
 
 @code {
     [Parameter] public long Id { get; set; }
 
-    private WikiPage wiki = new WikiPage();
+    private WikiPage wiki = new();
 
     protected override async Task OnInitializedAsync()
     {
         if (Id != 0)
         {
-            wiki = await Http.GetFromJsonAsync<WikiPage>($"api/wiki/{Id}") ?? new WikiPage();
+            wiki = await Http.GetFromJsonAsync<WikiPage>($"api/wiki/{Id}")
+                   ?? new WikiPage();
         }
     }
 
     private async Task Save()
     {
         wiki.AuthorId = Auth.UserId;
+
         if (Id == 0)
-        {
             await Http.PostAsJsonAsync("api/wiki", wiki);
-        }
         else
-        {
             await Http.PutAsJsonAsync($"api/wiki/{Id}", wiki);
-        }
 
         Navigation.NavigateTo("/wiki");
     }

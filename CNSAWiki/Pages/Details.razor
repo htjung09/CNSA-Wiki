@@ -1,24 +1,43 @@
 ﻿@page "/wiki/details/{Id:long}"
-@using CNSAWiki.Models;
-@using CNSAWiki.Data;
+@using CNSAWiki.Models
+@using CNSAWiki.Data
 @inject AuthService Auth
 @inject HttpClient Http
+@inject NavigationManager Navigation
 
-<h2>@wiki?.Title</h2>
+<h2 class="mb-3">📄 문서 상세</h2>
 
 @if (wiki == null)
 {
-    <p>Loading...</p>
+    <div class="alert alert-secondary">Loading...</div>
 }
 else
 {
-    <div>@wiki.Content</div>
-    <p>Created: @wiki.CreatedAt.ToLocalTime()</p>
-    <p>Updated: @wiki.UpdatedAt.ToLocalTime()</p>
-    @if (Auth.Authorized && wiki.AuthorId == Auth.UserId)
-    {
-        <button @onclick="NavToEdit">Edit</button>
-    }
+    <div class="card shadow-sm" style="max-width: 800px;">
+        <div class="card-body">
+
+            <h3 class="card-title">@wiki.Title</h3>
+
+            <div class="text-muted mb-3" style="font-size: 0.9rem;">
+                작성자 ID: @wiki.AuthorId <br />
+                생성: @wiki.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm") <br />
+                수정: @wiki.UpdatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")
+            </div>
+
+            <hr />
+
+            <div class="card-text" style="white-space: pre-wrap; line-height: 1.6;">
+                @wiki.Content
+            </div>
+
+            @if (Auth.Authorized && wiki.AuthorId == Auth.UserId)
+            {
+                <div class="mt-4">
+                    <button class="btn btn-primary me-2" @onclick="NavToEdit">수정</button>
+                </div>
+            }
+        </div>
+    </div>
 }
 
 @code {
@@ -31,11 +50,9 @@ else
         wiki = await Http.GetFromJsonAsync<WikiPage>($"api/wiki/{Id}");
     }
 
-    [Inject] NavigationManager Navigation { get; set; } = null!;
-
     void NavToEdit()
     {
-        if (wiki == null) return; 
+        if (wiki == null) return;
         Navigation.NavigateTo($"/wiki/edit/{wiki.PageId}");
     }
 }

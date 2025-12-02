@@ -5,46 +5,65 @@
 
 <PageTitle>Login</PageTitle>
 
-<h3>Login Page</h3>
+<h3 class="mt-3">로그인</h3>
 
-<input @bind="username" placeholder="ID" />
-<input @bind="password" type="password" placeholder="PW" />
+<div class="card p-4 shadow-sm" style="max-width:400px;">
+    <div class="mb-3">
+        <label class="form-label">아이디</label>
+        <input class="form-control" @bind="username" placeholder="아이디 입력" />
+    </div>
 
-<button @onclick="LoginFunc">Login</button>
+    <div class="mb-3">
+        <label class="form-label">비밀번호</label>
+        <input type="password" class="form-control" @bind="password" placeholder="비밀번호 입력" />
+    </div>
 
-@if (!string.IsNullOrEmpty(failMessage))
-{
-    <p style="color:red">@failMessage</p>
-}
+    <button class="btn btn-primary w-100" @onclick="LoginFunc" disabled="@isLoading">
+        @(isLoading ? "로그인 중..." : "로그인")
+    </button>
 
-@if (Auth.Authorized)
-{
-    <p style="color:green">로그인 성공! 사용자: @Auth.Username</p>
-    <button @onclick="GetMyInfo">내 정보 보기</button>
-    <p>@myInfo</p>
-}
+    <div class="text-center mt-3">
+        <a href="/register">아직 계정이 없나요? 회원가입</a>
+    </div>
+
+    @if (!string.IsNullOrEmpty(failMessage))
+    {
+        <div class="alert mt-3 alert-danger">
+            @failMessage
+        </div>
+    }
+
+    @if (Auth.Authorized)
+    {
+        <div class="alert mt-3 alert-success">
+            로그인 성공! 환영합니다, <strong>@Auth.Username</strong>님
+        </div>
+    }
+</div>
 
 @code {
     string username = "";
     string password = "";
     string? failMessage;
-    string myInfo = "";
+    bool isLoading = false;
 
     private async Task LoginFunc()
     {
         failMessage = null;
+        isLoading = true;
+        StateHasChanged();
+
         bool ok = await Auth.LoginAsync(username, password);
+
+        isLoading = false;
+
         if (!ok)
         {
-            failMessage = "로그인 실패. 아이디/비밀번호 확인.";
+            failMessage = "로그인 실패: 아이디 또는 비밀번호가 올바르지 않습니다.";
             return;
         }
-        StateHasChanged();
-    }
 
-    private void GetMyInfo()
-    {
-        myInfo = $"내 ID: {Auth.UserId}_{Auth.Username}\nJWT Token: {Auth.JwtToken}";
-        StateHasChanged();
+        // 로그인 성공 시 홈으로 이동 (또는 너 원하는 페이지로 이동)
+        Nav.NavigateTo("/");
     }
 }

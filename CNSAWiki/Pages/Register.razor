@@ -1,0 +1,55 @@
+﻿@page "/register"
+@using CNSAWiki.Data;
+@inject AuthService Auth
+@inject NavigationManager Nav
+
+<h3 class="mt-3">회원가입</h3>
+
+<div class="card p-4" style="max-width:400px;">
+    <div class="mb-3">
+        <label class="form-label">아이디</label>
+        <input class="form-control" @bind="username" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">비밀번호</label>
+        <input type="password" class="form-control" @bind="password" />
+    </div>
+
+    <button class="btn btn-primary w-100" @onclick="RegisterUser" disabled="@isLoading">
+        @(isLoading ? "처리 중..." : "회원가입")
+    </button>
+
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <div class="alert mt-3 @(success ? "alert-success" : "alert-danger")">
+            @message
+        </div>
+    }
+</div>
+
+@code {
+    private string username = "";
+    private string password = "";
+    private string message = "";
+    private bool success = false;
+    private bool isLoading = false;
+
+    private async Task RegisterUser()
+    {
+        message = "";
+        isLoading = true;
+
+        var result = await Auth.RegisterAsync(username, password);
+
+        success = result.success;
+        message = result.message;
+        isLoading = false;
+
+        if (result.success)
+        {
+            await Task.Delay(1000);
+            Nav.NavigateTo("/login");
+        }
+    }
+}

@@ -1,41 +1,57 @@
 ﻿@page "/wiki"
-@using CNSAWiki.Data;
+@using CNSAWiki.Data
+@using CNSAWiki.Models
 @inject HttpClient Http
 @inject AuthService Auth
-@using CNSAWiki.Models;
+@inject NavigationManager Navigation
 
-<h2>Wiki Pages</h2>
+<h2 class="mb-3">📘 Wiki 문서 목록</h2>
 
-@if (Auth.Authorized)
-{
-    <button @onclick="CreateNew">새 문서 작성</button>
-}
-else
-{
-    <p>글을 작성하려면 로그인 하십시오.</p>
-}
+<div class="mb-3">
+    @if (Auth.Authorized)
+    {
+        <button class="btn btn-primary" @onclick="CreateNew">+ 새 문서 작성</button>
+    }
+    else
+    {
+        <div class="alert alert-warning p-2" style="max-width:350px;">
+            글을 작성하려면 <a href="/login">로그인</a> 하세요.
+        </div>
+    }
+</div>
 
 @if (pages == null)
 {
     <p>Loading...</p>
 }
+else if (pages.Count == 0)
+{
+    <div class="alert alert-info">아직 작성된 문서가 없습니다.</div>
+}
 else
 {
-    <ul>
+    <ul class="list-group" style="max-width:600px;">
         @foreach (var pg in pages)
         {
-            <li>
-                <a href="/wiki/details/@pg.PageId">@pg.Title</a>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <a href="/wiki/details/@pg.PageId" class="fw-bold">@pg.Title</a>
+                    <div class="text-muted" style="font-size: 0.85rem;">
+                        작성자 ID: @pg.AuthorId
+                    </div>
+                </div>
+
                 @if (pg.AuthorId == Auth.UserId)
                 {
-                    <button @onclick="() => EditPage(pg.PageId)">Edit</button>
-                    <button @onclick="() => DeletePage(pg.PageId)">Delete</button>
+                    <div>
+                        <button class="btn btn-sm btn-outline-secondary me-1" @onclick="() => EditPage(pg.PageId)">수정</button>
+                        <button class="btn btn-sm btn-outline-danger" @onclick="() => DeletePage(pg.PageId)">삭제</button>
+                    </div>
                 }
             </li>
         }
     </ul>
 }
-
 @code {
     private List<WikiPage>? pages;
 
@@ -51,7 +67,7 @@ else
 
     private void CreateNew()
     {
-        Navigation.NavigateTo("/wiki/edit/0"); // 0이면 새 문서
+        Navigation.NavigateTo("/wiki/edit/0");
     }
 
     private void EditPage(long id)
@@ -64,6 +80,4 @@ else
         await Http.DeleteAsync($"api/wiki/{id}");
         await LoadPages();
     }
-
-    [Inject] NavigationManager Navigation { get; set; } = null!;
 }
