@@ -4,8 +4,7 @@
 @inject AuthService Auth
 @inject HttpClient Http
 @inject NavigationManager Navigation
-
-<h2 class="mb-3">📄 문서 상세</h2>
+@inject IJSRuntime JS
 
 @if (wiki == null)
 {
@@ -13,6 +12,13 @@
 }
 else
 {
+    <!-- 이전 버튼을 제일 위로 -->
+    <div class="mb-3">
+        <button class="btn btn-secondary" @onclick="GoBack">⬅ 이전</button>
+    </div>
+
+    @*<h2 class="mb-3">📄 문서 상세</h2>*@
+
     <div class="card shadow-sm" style="max-width: 800px;">
         <div class="card-body">
 
@@ -30,12 +36,13 @@ else
                 @((MarkupString)MarkdownToHtml(wiki.Content))
             </div>
 
-            @if (Auth.Authorized && wiki.AuthorId == Auth.UserId)
+            @if (Auth.Authorized && (wiki.AuthorId == Auth.UserId || Auth.Username == "admin"))
             {
-                <div class="mt-4">
-                    <button class="btn btn-primary me-2" @onclick="NavToEdit">수정</button>
+                <div class="mt-4 text-end">
+                    <button class="btn btn-primary" @onclick="NavToEdit">수정</button>
                 </div>
             }
+
         </div>
     </div>
 }
@@ -50,10 +57,15 @@ else
         wiki = await Http.GetFromJsonAsync<WikiPage>($"api/wiki/{Id}");
     }
 
-    void NavToEdit()
+    private void NavToEdit()
     {
         if (wiki == null) return;
         Navigation.NavigateTo($"/wiki/edit/{wiki.PageId}");
+    }
+
+    private async Task GoBack()
+    {
+        await JS.InvokeVoidAsync("history.back");
     }
 
     private string MarkdownToHtml(string markdown)
@@ -66,7 +78,7 @@ else
             .Replace("<", "&lt;")
             .Replace(">", "&gt;");
 
-        // 코드 블럭 ``` ``` (줄바꿈 포함)
+        // 코드 블럭 ``` ```
         html = System.Text.RegularExpressions.Regex.Replace(
             html,
             @"```([\s\S]+?)```",

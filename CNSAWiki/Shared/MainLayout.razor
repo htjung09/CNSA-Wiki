@@ -1,6 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @using Data;
 @inject AuthService Auth
+@inject IJSRuntime JS
 
 <PageTitle>CNSAWiki</PageTitle>
 
@@ -10,18 +11,18 @@
     </div>
 
     <main>
-        <div class="top-row px-4">
+        <div class="top-row px-4 d-flex align-items-center">
             @if (Auth.Authorized)
             {
-                <p>@Auth.Username</p>
-                <button class="btn btn-primary">로그아웃</button>
+                <p class="username mb-0 me-2">@Auth.Username</p>
+                <button class="btn btn-primary" @onclick="LogoutAndRefresh">로그아웃</button>
             }
             else
             {
-                <NavLink class="nav-link" href="register">
+                <NavLink href="register">
                     <button class="btn btn-primary">회원가입</button>
                 </NavLink>
-                <NavLink class="nav-link" href="login">
+                <NavLink href="login">
                     <button class="btn btn-primary">로그인</button>
                 </NavLink>
             }
@@ -32,3 +33,11 @@
         </article>
     </main>
 </div>
+
+@code {
+    private async Task LogoutAndRefresh()
+    {
+        Auth.Logout();  // 기존 로그아웃 처리
+        await JS.InvokeVoidAsync("location.reload"); // 페이지 새로고침
+    }
+}

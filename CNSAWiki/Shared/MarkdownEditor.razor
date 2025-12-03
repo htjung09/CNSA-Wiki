@@ -1,17 +1,23 @@
-﻿@using Microsoft.AspNetCore.Components.Web
+﻿@using Microsoft.AspNetCore.Components.Forms
+@inject HttpClient Http
 
 <div class="row">
     <!-- 좌측: Markdown 입력 -->
     <div class="col-md-6">
+        <div class="d-flex mb-2 gap-2">
+            <label class="btn btn-secondary btn-sm mb-0" style="cursor:pointer;">
+                이미지 업로드
+                <InputFile style="display:none" OnChange="OnImageSelected" />
+            </label>
+        </div>
+
         <textarea class="form-control"
                   style="height:350px; white-space:pre-wrap; font-family: monospace;"
                   @oninput="OnValueChanged"
-                  placeholder="문서 내용을 입력하세요...">
-                  @Value
-        </textarea>
+                  placeholder="문서 내용을 입력하세요...">@Value</textarea>
     </div>
 
-    <!-- 우측: 미리보기 -->
+    <!-- 우측: Markdown 미리보기 -->
     <div class="col-md-6 border p-2"
          style="height:350px; overflow:auto; background-color:#f8f9fa;">
         @((MarkupString)MarkdownToHtml(Value))
@@ -22,12 +28,41 @@
     [Parameter] public string Value { get; set; } = "";
     [Parameter] public EventCallback<string> ValueChanged { get; set; }
 
+    /* =============== 입력 이벤트 =============== */
     private async Task OnValueChanged(ChangeEventArgs e)
     {
         Value = e.Value?.ToString() ?? "";
         await ValueChanged.InvokeAsync(Value);
     }
 
+    /* =============== 이미지 선택 후 업로드 =============== */
+    private async Task OnImageSelected(InputFileChangeEventArgs e)
+    {
+        var file = e.File; // IBrowserFile 타입
+
+        var content = new MultipartFormDataContent();
+        content.Add(new StreamContent(file.OpenReadStream(20_000_000)), "file", file.Name);
+
+        var result = await Http.PostAsync("api/wiki/upload", content);
+        if (!result.IsSuccessStatusCode)
+        {
+            // 실패 처리
+            Console.WriteLine("이미지 업로드 실패");
+            return;
+        }
+
+        var json = await result.Content.ReadFromJsonAsync<UploadResult>();
+
+        Value += $"\n![]({json?.url})\n";
+        await ValueChanged.InvokeAsync(Value);
+    }
+
+    public class UploadResult
+    {
+        public string url { get; set; }
+    }
+
+    /* =============== Markdown → HTML 변환기 =============== */
     private string MarkdownToHtml(string markdown)
     {
         if (string.IsNullOrEmpty(markdown))
@@ -38,13 +73,13 @@
             .Replace("<", "&lt;")
             .Replace(">", "&gt;");
 
-        // 코드 블럭 ``` ``` (줄바꿈 포함)
+        // 코드 블럭 ``` ```
         html = System.Text.RegularExpressions.Regex.Replace(
             html,
             @"```([\s\S]+?)```",
             "<pre style='background-color:#e9ecef;padding:5px;'>$1</pre>");
 
-        // 헤더: # ~ ######
+        // 헤더 # ~ ######
         for (int i = 6; i >= 1; i--)
         {
             string pattern = @"^" + new string('#', i) + @"\s+(.+)$";
@@ -53,11 +88,11 @@
                 html, pattern, replacement, System.Text.RegularExpressions.RegexOptions.Multiline);
         }
 
-        // 굵게 **
+        // 굵게 **text**
         html = System.Text.RegularExpressions.Regex.Replace(
             html, @"\*\*(.+?)\*\*", "<b>$1</b>");
 
-        // 기울임 *
+        // 기울임 *text*
         html = System.Text.RegularExpressions.Regex.Replace(
             html, @"\*(.+?)\*", "<i>$1</i>");
 
@@ -65,16 +100,23 @@
         html = System.Text.RegularExpressions.Regex.Replace(
             html, @"~~(.+?)~~", "<s>$1</s>");
 
-        // 순서 없는 리스트
+        // 순서 없는 리스트 - 또는 *
         html = System.Text.RegularExpressions.Regex.Replace(
             html, @"^\s*[-*]\s+(.+)$", "<li>$1</li>", System.Text.RegularExpressions.RegexOptions.Multiline);
-        html = System.Text.RegularExpressions.Regex.Replace(html, @"(<li>.+</li>)", "<ul>$1</ul>", System.Text.RegularExpressions.RegexOptions.Singleline);
-        
-        // 하이퍼링크: [텍스트](링크)
+        html = System.Text.RegularExpressions.Regex.Replace(
+            html, @"(<li>.+</li>)", "<ul>$1</ul>", System.Text.RegularExpressions.RegexOptions.Singleline);
+
+        // 링크 [텍스트](url)
         html = System.Text.RegularExpressions.Regex.Replace(
             html,
             @"\[(.+?)\]\((https?://.+?)\)",
             "<a href='$2' target='_blank'>$1</a>");
+
+        // 이미지 ![](url)
+        html = System.Text.RegularExpressions.Regex.Replace(
+            html,
+            @"!\[(.*?)\]\((.*?)\)",
+            "<img src='$2' alt='$1' style='max-width:100%; margin:5px 0;' />");
 
         // 줄바꿈
         html = html.Replace("\n", "<br>");

@@ -59,6 +59,15 @@ namespace CNSAWiki.Data
             return true;
         }
 
+        public void Logout()
+        {
+            if (!Authorized) return;
+            Authorized = false;
+            Username = string.Empty;
+            UserId = -1;
+            JwtToken = string.Empty;
+        }
+
         // ⭐ 회원가입
         public async Task<(bool success, string message)> RegisterAsync(string username, string password)
         {

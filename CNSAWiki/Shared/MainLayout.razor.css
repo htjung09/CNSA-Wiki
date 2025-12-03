@@ -21,6 +21,11 @@ main {
     align-items: center;
 }
 
+.username {
+    margin-bottom: 0; /* p 기본 margin 제거 */
+    margin-right: 8px; /* 버튼과 간격 조절 */
+}
+
     .top-row ::deep a, .top-row .btn-link {
         white-space: nowrap;
         margin-left: 1.5rem;

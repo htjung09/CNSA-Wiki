@@ -22,7 +22,7 @@ namespace WikiApi.Controllers
         public async Task<ActionResult<List<WikiPage>>> GetWikiPages()
         {
             return await _context.WikiPages
-                                 .OrderBy(w => w.Title)
+                                 .OrderByDescending(w => w.UpdatedAt)
                                  .ToListAsync();
         }
 
@@ -81,6 +81,37 @@ namespace WikiApi.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        // POST: api/wiki/upload
+        // POST: api/wiki/upload
+        [Authorize]
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadImage(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest(new { error = "No file" });
+
+            string[] allowed = { ".png", ".jpg", ".jpeg", ".gif", ".webp" };
+            var ext = Path.GetExtension(file.FileName).ToLower();
+            if (!allowed.Contains(ext))
+                return BadRequest(new { error = "Invalid file type" });
+
+            var fileName = Guid.NewGuid().ToString("N") + ext;
+            var uploadPath = Path.Combine("wwwroot", "uploads");
+
+            if (!Directory.Exists(uploadPath))
+                Directory.CreateDirectory(uploadPath);
+
+            var filePath = Path.Combine(uploadPath, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+                await file.CopyToAsync(stream);
+
+            // 웹에서 접근 가능한 URL
+            string fileUrl = $"{Request.Scheme}://{Request.Host}/uploads/{fileName}";
+
+            return Ok(new { url = fileUrl });
         }
     }
 }

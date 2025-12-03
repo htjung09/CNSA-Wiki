@@ -29,4 +29,8 @@
     <ProjectReference Include="..\SharedData\SharedData.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="uploads\" />
+  </ItemGroup>
+
 </Project>

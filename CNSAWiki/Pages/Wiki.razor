@@ -5,7 +5,7 @@
 @inject AuthService Auth
 @inject NavigationManager Navigation
 
-<h2 class="mb-3">📘 위키 문서 목록</h2>
+<h2 class="mb-3">📘 최근 변경 문서</h2>
 
 <div class="mb-3">
     @if (Auth.Authorized)
@@ -41,7 +41,7 @@ else
                     </div>
                 </div>
 
-                @if (pg.AuthorId == Auth.UserId)
+                @if (pg.AuthorId == Auth.UserId || Auth.Username == "admin")
                 {
                     <div>
                         <button class="btn btn-sm btn-outline-secondary me-1" @onclick="() => EditPage(pg.PageId)">수정</button>
