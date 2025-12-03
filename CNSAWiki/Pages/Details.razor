@@ -98,6 +98,12 @@ else
             html, @"^\s*[-*]\s+(.+)$", "<li>$1</li>", System.Text.RegularExpressions.RegexOptions.Multiline);
         html = System.Text.RegularExpressions.Regex.Replace(html, @"(<li>.+</li>)", "<ul>$1</ul>", System.Text.RegularExpressions.RegexOptions.Singleline);
 
+        // 하이퍼링크: [텍스트](링크)
+        html = System.Text.RegularExpressions.Regex.Replace(
+            html,
+            @"\[(.+?)\]\((https?://.+?)\)",
+            "<a href='$2' target='_blank'>$1</a>");
+
         // 줄바꿈
         html = html.Replace("\n", "<br>");
 
