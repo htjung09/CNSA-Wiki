@@ -1,16 +1,17 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
+@using System.Text.RegularExpressions;
 @inject HttpClient Http
+@inject IJSRuntime JS
 
 <div class="row">
     <!-- 좌측: Markdown 입력 -->
+    <div class="d-flex mb-2 gap-2">
+        <label class="btn btn-secondary btn-sm mb-0" style="cursor:pointer;">
+            이미지 업로드
+            <InputFile style="display:none" OnChange="OnImageSelected" />
+        </label>
+    </div>
     <div class="col-md-6">
-        <div class="d-flex mb-2 gap-2">
-            <label class="btn btn-secondary btn-sm mb-0" style="cursor:pointer;">
-                이미지 업로드
-                <InputFile style="display:none" OnChange="OnImageSelected" />
-            </label>
-        </div>
-
         <textarea class="form-control"
                   style="height:350px; white-space:pre-wrap; font-family: monospace;"
                   @oninput="OnValueChanged"
@@ -52,7 +53,8 @@
         }
 
         var json = await result.Content.ReadFromJsonAsync<UploadResult>();
-
+        
+        await JS.InvokeVoidAsync("appendToTextarea", "editor", $"\n![]({json?.url})\n");
         Value += $"\n![]({json?.url})\n";
         await ValueChanged.InvokeAsync(Value);
     }
@@ -74,7 +76,7 @@
             .Replace(">", "&gt;");
 
         // 코드 블럭 ``` ```
-        html = System.Text.RegularExpressions.Regex.Replace(
+        html = Regex.Replace(
             html,
             @"```([\s\S]+?)```",
             "<pre style='background-color:#e9ecef;padding:5px;'>$1</pre>");
@@ -84,39 +86,46 @@
         {
             string pattern = @"^" + new string('#', i) + @"\s+(.+)$";
             string replacement = $"<h{i}>$1</h{i}>";
-            html = System.Text.RegularExpressions.Regex.Replace(
-                html, pattern, replacement, System.Text.RegularExpressions.RegexOptions.Multiline);
+            html = Regex.Replace(
+                html, pattern, replacement, RegexOptions.Multiline);
         }
 
         // 굵게 **text**
-        html = System.Text.RegularExpressions.Regex.Replace(
+        html = Regex.Replace(
             html, @"\*\*(.+?)\*\*", "<b>$1</b>");
 
         // 기울임 *text*
-        html = System.Text.RegularExpressions.Regex.Replace(
+        html = Regex.Replace(
             html, @"\*(.+?)\*", "<i>$1</i>");
 
         // 취소선 ~~text~~
-        html = System.Text.RegularExpressions.Regex.Replace(
+        html = Regex.Replace(
             html, @"~~(.+?)~~", "<s>$1</s>");
 
         // 순서 없는 리스트 - 또는 *
-        html = System.Text.RegularExpressions.Regex.Replace(
-            html, @"^\s*[-*]\s+(.+)$", "<li>$1</li>", System.Text.RegularExpressions.RegexOptions.Multiline);
-        html = System.Text.RegularExpressions.Regex.Replace(
-            html, @"(<li>.+</li>)", "<ul>$1</ul>", System.Text.RegularExpressions.RegexOptions.Singleline);
+        // 1) Markdown 리스트를 <li>로 변환
+        html = Regex.Replace(html,
+            @"^\s*[-*]\s+(.+)$",
+            "<li>$1</li>",
+            RegexOptions.Multiline);
 
-        // 링크 [텍스트](url)
-        html = System.Text.RegularExpressions.Regex.Replace(
-            html,
-            @"\[(.+?)\]\((https?://.+?)\)",
-            "<a href='$2' target='_blank'>$1</a>");
+        // 2) 연속된 <li> 묶음을 <ul>...</ul> 로 감싸기
+        html = Regex.Replace(html,
+            @"(?:<li>.*?</li>\s*)+",
+            m => "<ul>\n" + m.Value + "\n</ul>",
+            RegexOptions.Singleline);
 
         // 이미지 ![](url)
-        html = System.Text.RegularExpressions.Regex.Replace(
+        html = Regex.Replace(
             html,
             @"!\[(.*?)\]\((.*?)\)",
             "<img src='$2' alt='$1' style='max-width:100%; margin:5px 0;' />");
+
+        // 링크 [텍스트](url)
+        html = Regex.Replace(
+            html,
+            @"\[(.+?)\]\((https?://.+?)\)",
+            "<a href='$2' target='_blank'>$1</a>");
 
         // 줄바꿈
         html = html.Replace("\n", "<br>");

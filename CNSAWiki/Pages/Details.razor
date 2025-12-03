@@ -1,6 +1,7 @@
 ﻿@page "/wiki/details/{Id:long}"
 @using CNSAWiki.Models
 @using CNSAWiki.Data
+@using System.Text.RegularExpressions
 @inject AuthService Auth
 @inject HttpClient Http
 @inject NavigationManager Navigation
@@ -79,7 +80,7 @@ else
             .Replace(">", "&gt;");
 
         // 코드 블럭 ``` ```
-        html = System.Text.RegularExpressions.Regex.Replace(
+        html = Regex.Replace(
             html,
             @"```([\s\S]+?)```",
             "<pre style='background-color:#e9ecef;padding:5px;'>$1</pre>");
@@ -89,29 +90,44 @@ else
         {
             string pattern = @"^" + new string('#', i) + @"\s+(.+)$";
             string replacement = $"<h{i}>$1</h{i}>";
-            html = System.Text.RegularExpressions.Regex.Replace(
-                html, pattern, replacement, System.Text.RegularExpressions.RegexOptions.Multiline);
+            html = Regex.Replace(
+                html, pattern, replacement, RegexOptions.Multiline);
         }
 
         // 굵게 **
-        html = System.Text.RegularExpressions.Regex.Replace(
+        html = Regex.Replace(
             html, @"\*\*(.+?)\*\*", "<b>$1</b>");
 
         // 기울임 *
-        html = System.Text.RegularExpressions.Regex.Replace(
+        html = Regex.Replace(
             html, @"\*(.+?)\*", "<i>$1</i>");
 
         // 취소선 ~~text~~
-        html = System.Text.RegularExpressions.Regex.Replace(
+        html = Regex.Replace(
             html, @"~~(.+?)~~", "<s>$1</s>");
 
-        // 순서 없는 리스트
-        html = System.Text.RegularExpressions.Regex.Replace(
-            html, @"^\s*[-*]\s+(.+)$", "<li>$1</li>", System.Text.RegularExpressions.RegexOptions.Multiline);
-        html = System.Text.RegularExpressions.Regex.Replace(html, @"(<li>.+</li>)", "<ul>$1</ul>", System.Text.RegularExpressions.RegexOptions.Singleline);
+
+        // 순서 없는 리스트 - 또는 *
+        // 1) Markdown 리스트를 <li>로 변환
+        html = Regex.Replace(html,
+            @"^\s*[-*]\s+(.+)$",
+            "<li>$1</li>",
+            RegexOptions.Multiline);
+
+        // 2) 연속된 <li> 묶음을 <ul>...</ul> 로 감싸기
+        html = Regex.Replace(html,
+            @"(?:<li>.*?</li>\s*)+",
+            m => "<ul>\n" + m.Value + "\n</ul>",
+            RegexOptions.Singleline);
+
+        // 이미지 ![](url)
+        html = Regex.Replace(
+            html,
+            @"!\[(.*?)\]\((.*?)\)",
+            "<img src='$2' alt='$1' style='max-width:100%; margin:5px 0;' />");
 
         // 하이퍼링크: [텍스트](링크)
-        html = System.Text.RegularExpressions.Regex.Replace(
+        html = Regex.Replace(
             html,
             @"\[(.+?)\]\((https?://.+?)\)",
             "<a href='$2' target='_blank'>$1</a>");

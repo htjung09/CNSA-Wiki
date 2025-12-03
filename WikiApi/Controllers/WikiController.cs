@@ -84,7 +84,6 @@ namespace WikiApi.Controllers
         }
 
         // POST: api/wiki/upload
-        // POST: api/wiki/upload
         [Authorize]
         [HttpPost("upload")]
         public async Task<IActionResult> UploadImage(IFormFile file)
