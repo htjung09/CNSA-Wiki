@@ -35,6 +35,21 @@ namespace WikiApi.Controllers
             return page;
         }
 
+        [HttpGet("search")]
+        public async Task<IActionResult> Search(string q)
+        {
+            if (string.IsNullOrWhiteSpace(q))
+                return Ok(new List<WikiPage>());
+
+            // 간단한 부분 일치 검색
+            var result = await _context.WikiPages
+                .Where(p => p.Title.Contains(q) || p.Content.Contains(q))
+                .ToListAsync();
+
+            return Ok(result);
+        }
+
+
         // POST: api/wiki
         [Authorize]
         [HttpPost]
