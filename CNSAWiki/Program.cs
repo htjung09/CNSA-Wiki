@@ -8,7 +8,8 @@ builder.Services.AddServerSideBlazor();
 // 공용 HttpClient
 builder.Services.AddSingleton(sp => new HttpClient
 {
-    BaseAddress = new Uri("https://localhost:7289/")
+    BaseAddress = new Uri("https://wikiapi20251207125540.azurewebsites.net/")
+    //BaseAddress = new Uri("https://localhost:7289/")
 });
 
 // 서비스 등록
