@@ -14,13 +14,47 @@
 ## 프로젝트의 목적
 학생들이 서로 학교 생활에 대한 이야기를 나누고 동아리, 학교 행사, 정보를 공유할 수 있는 사이트 같은게 있으면 좋을 것 같다고 생각해 이 프로젝트를 진행하게 되었다.
 
-## 설치 방법
-
 ## 주요 기능
+
+## 기술 스택
+<table>
+	<tr>
+		<th>분류</th>
+		<th>설명</th>
+	</tr>
+	<tr>
+		<td>웹프레임워크</td>
+		<td>ASP.NET Blazor</td>
+	</tr>
+</table>
 
 ## 시스템 구조
 
 ## 폴더 구조
+<table>
+	<tr>
+		<th>디렉토리</th>
+		<th>설명</th>
+	</tr>
+	<tr>
+		<td>/</td>
+		<td>비주얼 스튜디오 솔루션<td>
+	</tr>
+	<tr>
+		<td>/CNSAWiki</td>
+		<td>프론트엔드 프로젝트(UI, Blazor Server App)</td>
+	</tr>
+	<tr>
+		<td>/WikiApi</td>
+		<td>백엔드 프로젝트(ASP.NET Core Web Api)</td>
+	</tr>
+	<tr>
+		<td>/SharedData</td>
+		<td>두 프로젝트(CNSAWiki, WikiApi)에서 공통으로 사용하는 클래스 정리용 프로젝트(Class Library)</td>
+	</tr>
+</table>
+
+## 설치 방법
 
 ## 개발자 소개
 <table>
