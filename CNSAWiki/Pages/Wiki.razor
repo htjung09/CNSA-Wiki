@@ -7,7 +7,7 @@
 
 <h2 class="mb-3">📘 최근 변경 문서</h2>
 
-<div class="mb-3">
+<div class="mb-3 d-flex gap-2">
     @if (Auth.Authorized)
     {
         <button class="btn btn-primary" @onclick="CreateNew">+ 새 문서 작성</button>
@@ -18,7 +18,12 @@
             글을 작성하려면 <a href="/login">로그인</a> 하세요.
         </div>
     }
+
+    <button class="btn btn-outline-secondary" @onclick="GoSearch">
+        🔍 검색
+    </button>
 </div>
+
 
 @if (pages == null)
 {
@@ -79,5 +84,10 @@ else
     {
         await Http.DeleteAsync($"api/wiki/{id}");
         await LoadPages();
+    }
+
+    private void GoSearch()
+    {
+        Navigation.NavigateTo("/wiki/search");
     }
 }

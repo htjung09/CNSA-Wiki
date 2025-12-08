@@ -1,0 +1,69 @@
+﻿@page "/wiki/search"
+@using CNSAWiki.Models
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<h2 class="mb-3">🔍 문서 검색</h2>
+
+<div class="input-group mb-3" style="max-width:500px;">
+    <input class="form-control"
+           placeholder="검색어를 입력하세요"
+           @bind="query"
+           @bind:event="oninput" />
+
+    <button class="btn btn-primary" @onclick="SearchAsync">
+        검색
+    </button>
+</div>
+
+@if (loading)
+{
+    <p>검색 중...</p>
+}
+else if (!loading && query.Length > 0 && results?.Count == 0)
+{
+    <div class="alert alert-info">검색 결과가 없습니다.</div>
+}
+else if (results != null)
+{
+    <ul class="list-group" style="max-width:600px;">
+        @foreach (var pg in results)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div style="width:100%;">
+                    <a href="/wiki/details/@pg.PageId" class="fw-bold">@pg.Title</a>
+                    <div class="text-muted" style="font-size:0.85rem;">
+                        @Shorten(pg.Content)
+                    </div>
+                </div>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private string query = "";
+    private bool loading = false;
+    private List<WikiPage>? results;
+
+    private async Task SearchAsync()
+    {
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            results = new();
+            return;
+        }
+
+        loading = true;
+        results = await Http.GetFromJsonAsync<List<WikiPage>>(
+            $"api/wiki/search?q={Uri.EscapeDataString(query)}"
+        );
+        loading = false;
+    }
+
+    private string Shorten(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text)) return "";
+        return text.Length > 80 ? text.Substring(0, 80) + "..." : text;
+    }
+}
