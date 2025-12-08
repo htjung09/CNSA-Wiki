@@ -67,7 +67,7 @@
 </table>
 
 ## 시스템 구조
-![이미지]()
+![이미지](/Description/flowchart.png)
 
 ## 폴더 구조
 <table>
