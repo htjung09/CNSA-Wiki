@@ -67,7 +67,7 @@
 </table>
 
 ## 시스템 구조
-![이미지]()
+![이미지](https://github.com/htjung09/CNSA-Wiki/blob/master/Description/flowchart.png)
 
 ## 폴더 구조
 <table>
@@ -94,6 +94,56 @@
 </table>
 
 ## 설치 방법
+### 1. 프로젝트 클론
+```bash
+git clone https://github.com/htjung09/CNSA-Wiki
+cd CNSA-Wiki
+```
+
+### 2. 데이터베이스 설정
+#### (1) appsettings.json 수정
+WikiApi 프로젝트의 appsettings.json 파일에서 ConnectionStrings:DefaultConnection 값을 본인 환경에 맞게 수정
+
+예시)
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "Server=localhost;Database=CNSAWiki;Trusted_Connection=True;MultipleActiveResultSets=true"
+}
+```
+
+#### (2) 데이터베이스 마이그레이션 적용
+```bash
+cd WikiApi
+dotnet ef database update
+```
+
+### 3. 백엔드(API 서버) 실행
+```bash
+cd WikiApi
+dotnet run
+```
+
+### 4. 프론트엔드와 백엔드 연결하기
+CNSAWiki 프로젝트의 Program.cs 파일에서 HttpClient의 BaseAdress를 터미널에 나오는 자신의 API의 주소로 설정
+
+예시)
+```cs
+builder.Services.AddSingleton(sp => new HttpClient
+{
+    BaseAddress = new Uri("http://localhost:5000")
+});
+```
+
+### 5. 프론트엔드(Blazor) 실행
+새 터미널을 열고 다음 명령어 실행
+```bash
+cd CNSA-Wiki/CNSAWiki
+dotnet run
+```
+
+### 6. 실행 확인
+- 터미널에 나오는 주소로 브라우저에서 접속
+- 로그인, 문서 작성, 이미지 업로드 등 기능이 정상 작동하는지 확인
 
 ## 개발자 소개
 <table>
