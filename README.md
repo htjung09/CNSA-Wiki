@@ -67,7 +67,7 @@
 </table>
 
 ## 시스템 구조
-![이미지](/Description/flowchart.png)
+![이미지](https://github.com/htjung09/CNSA-Wiki/blob/master/Description/flowchart.png)
 
 ## 폴더 구조
 <table>
