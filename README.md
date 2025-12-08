@@ -25,32 +25,43 @@
 ## 기술 스택
 <table>
 	<tr>
-		<th>분류</th>
-		<th>설명</th>
+		<td>프론트엔드</td>
+		<td>
+			<img src="https://img.shields.io/badge/ASP.NET%20Blazor-512BD4?style=for-the-badge&logo=blazor&logoColor=white" />
+		</td>
 	</tr>
 	<tr>
-		<td>웹프레임워크</td>
-		<td>ASP.NET Blazor</td>
-	</tr>
-	<tr>
-		<td>웹 API</td>
-		<td>ASP.NET</td>
+		<td>백엔드</td>
+		<td>
+			<img src="https://img.shields.io/badge/ASP.NET-512BD4?style=for-the-badge&logo=.net&logoColor=white" />
+		</td>
 	</tr>
 	<tr>
 		<td>개발 언어</td>
-		<td>C#, HTML, CSS</td>
+		<td>
+			<img src="https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=csharp&logoColor=white" />
+			<img src="https://img.shields.io/badge/HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white" />
+			<img src="https://img.shields.io/badge/CSS-1572B6?style=for-the-badge&logo=css&logoColor=white" />
+		</td>
 	</tr>
 	<tr>
 		<td>ORM</td>
-		<td>Entity Framework Core</td>
+		<td>
+			<img src="https://img.shields.io/badge/Entity%20Framework%20Core-512BD4?style=for-the-badge&logo=.net&logoColor=white" />
+		</td>
 	</tr>
 	<tr>
 		<td>데이터베이스</td>
-		<td>Azure Sql Server</td>
+		<td>
+			<img src="https://img.shields.io/badge/Azure%20SQL%20Database-0078D4?style=for-the-badge&logo=microsoft-azure&logoColor=white" />
+		</td>
 	</tr>
 	<tr>
-		<td>개발 환경</td>
-		<td>Visual Studio Community 2022</td>
+		<td>개발 툴</td>
+		<td>
+			<img src="https://img.shields.io/badge/Visual%20Studio%202022-5C2D91?style=for-the-badge&logo=visual-studio&logoColor=white" />
+			<img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" />
+		</td>
 	</tr>
 </table>
 
