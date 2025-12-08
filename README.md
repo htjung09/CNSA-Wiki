@@ -100,14 +100,7 @@ git clone https://github.com/htjung09/CNSA-Wiki
 cd CNSA-Wiki
 ```
 
-### 2. 사전 요구 사항
-이 프로젝트를 실행하기 위해선 다음이 필요합니다:
-- .NET SDK 8.0 이상
-- Visual Studio 또는 Visual Studio Code
-- Git
-- SQL Server
-
-### 3. 데이터베이스 설정
+### 2. 데이터베이스 설정
 #### (1) appsettings.json 수정
 WikiApi 프로젝트의 appsettings.json 파일에서 ConnectionStrings:DefaultConnection 값을 본인 환경에 맞게 수정
 
@@ -124,13 +117,13 @@ cd WikiApi
 dotnet ef database update
 ```
 
-### 4. 백엔드(API 서버) 실행
+### 3. 백엔드(API 서버) 실행
 ```bash
 cd WikiApi
 dotnet run
 ```
 
-### 5. 프론트엔드와 백엔드 연결하기
+### 4. 프론트엔드와 백엔드 연결하기
 CNSAWiki 프로젝트의 Program.cs 파일에서 HttpClient의 BaseAdress를 터미널에 나오는 자신의 API의 주소로 설정
 
 예시)
@@ -141,14 +134,14 @@ builder.Services.AddSingleton(sp => new HttpClient
 });
 ```
 
-### 6. 프론트엔드(Blazor) 실행
+### 5. 프론트엔드(Blazor) 실행
 새 터미널을 열고 다음 명령어 실행
 ```bash
 cd CNSA-Wiki/CNSAWiki
 dotnet run
 ```
 
-### 7. 실행 확인
+### 6. 실행 확인
 - 터미널에 나오는 주소로 브라우저에서 접속
 - 로그인, 문서 작성, 이미지 업로드 등 기능이 정상 작동하는지 확인
 
