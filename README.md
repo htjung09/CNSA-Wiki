@@ -32,6 +32,26 @@
 		<td>웹프레임워크</td>
 		<td>ASP.NET Blazor</td>
 	</tr>
+	<tr>
+		<td>웹 API</td>
+		<td>ASP.NET</td>
+	</tr>
+	<tr>
+		<td>개발 언어</td>
+		<td>C#, HTML, CSS</td>
+	</tr>
+	<tr>
+		<td>ORM</td>
+		<td>Entity Framework Core</td>
+	</tr>
+	<tr>
+		<td>데이터베이스</td>
+		<td>Azure Sql Server</td>
+	</tr>
+	<tr>
+		<td>개발 환경</td>
+		<td>Visual Studio Community 2022</td>
+	</tr>
 </table>
 
 ## 시스템 구조
