@@ -49,6 +49,24 @@ namespace WikiApi.Controllers
             return Ok(result);
         }
 
+        // GET: api/wiki/suggest?q=...
+        [HttpGet("suggest")]
+        public async Task<IActionResult> Suggest(string q)
+        {
+            if (string.IsNullOrWhiteSpace(q))
+                return Ok(new List<string>());
+
+            // 제목 기준 추천 (최대 5개)
+            var suggestions = await _context.WikiPages
+                .Where(p => p.Title.Contains(q))
+                .OrderBy(p => p.Title)
+                .Select(p => p.Title)
+                .Take(5)
+                .ToListAsync();
+
+            return Ok(suggestions);
+        }
+
 
         // POST: api/wiki
         [Authorize]

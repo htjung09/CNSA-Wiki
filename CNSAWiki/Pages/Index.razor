@@ -24,19 +24,24 @@
             </div>
         </div>
 
-        <!-- 위키 참여 카드 -->
+        <!-- 급식 메뉴 카드 -->
         <div class="col-md-6 mb-4">
             <div class="card h-100 shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title">위키 참여</h5>
+                    <h5 class="card-title">급식 메뉴 확인</h5>
                     <p class="card-text">
-                        여러분의 경험과 정보를 공유하고 위키를 더 풍성하게 만들어보세요.
+                        오늘의 급식 또는 원하는 날짜의 급식 메뉴를 확인해보세요!
                     </p>
-                    <!-- SurveyPrompt 칸 -->
-                    <SurveyPrompt Title="위키 참여하기" />
+
+                    <!-- 오늘 날짜를 기반으로 이동 -->
+                    @* 예: Meal/2025-12-08 *@
+                    <a class="btn btn-success" href="/Meal/@DateTime.Now.ToString("yyyyMMdd")">
+                        오늘 급식 보러가기
+                    </a>
                 </div>
             </div>
         </div>
+
     </div>
 
     <!-- 공지 영역 -->

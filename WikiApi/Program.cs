@@ -33,6 +33,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddHttpClient<MealService>();
 
 
 var app = builder.Build();

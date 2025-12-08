@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\Images\CNSALogo - 복사.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\favicon.png" />
     <None Include="wwwroot\Images\CNSALogo.png" />
   </ItemGroup>
 

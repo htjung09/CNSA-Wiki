@@ -1,0 +1,139 @@
+﻿@page "/Meal/{date}"
+@using System.Text.Json
+@inject HttpClient Http
+
+<h1>@formattedDate 식단</h1>
+
+@if (isLoading)
+{
+    <p>불러오는 중...</p>
+}
+else if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-warning">
+        <strong>데이터를 불러오지 못했습니다.</strong>
+        <div>@(errorMessage)</div>
+        <details>
+            <summary>원본 응답(디버그)</summary>
+            <pre style="white-space:pre-wrap;">@rawResponse</pre>
+        </details>
+    </div>
+}
+else if (meals == null || meals.Count == 0)
+{
+    <p>오늘은 급식 정보가 없습니다 😥</p>
+}
+else
+{
+    <h2>🍽 조식</h2>
+    <p>@((MarkupString)(FormatHtml(breakfast?.DDISH_NM) ?? "조식 없음"))</p>
+
+    <h2>🍱 중식</h2>
+    <p>@((MarkupString)(FormatHtml(lunch?.DDISH_NM) ?? "중식 없음"))</p>
+
+    <h2>🍛 석식</h2>
+    <p>@((MarkupString)(FormatHtml(dinner?.DDISH_NM) ?? "석식 없음"))</p>
+}
+
+@code {
+
+    [Parameter] public string date { get; set; } = "";
+    private string formattedDate = "";
+
+    private List<MealRow>? meals;
+    private MealRow? breakfast;
+    private MealRow? lunch;
+    private MealRow? dinner;
+
+    private bool isLoading = true;
+    private string? errorMessage;
+    private string rawResponse = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        errorMessage = null;
+        rawResponse = "";
+
+        // ✔ 날짜 예쁘게 포맷팅: 20251208 → 2025년 12월 8일
+        try
+        {
+            formattedDate = DateTime.ParseExact(date, "yyyyMMdd", null)
+                                   .ToString("yyyy년 M월 d일");
+        }
+        catch
+        {
+            formattedDate = date; // 혹시 에러나면 원본 표시
+        }
+        try
+        {
+            // API 호출: 포트/주소가 실제 API가 돌아가는 주소와 일치해야 함
+            string url = $"/api/meal/{date}";
+            Console.WriteLine($"요청: {url}");
+
+            using var response = await Http.GetAsync(url);
+            rawResponse = await response.Content.ReadAsStringAsync();
+
+            Console.WriteLine("=== 받은 응답(요약) ===");
+            Console.WriteLine($"StatusCode: {response.StatusCode}");
+            Console.WriteLine(rawResponse.Length > 1000 ? rawResponse.Substring(0, 1000) + "..." : rawResponse);
+
+            // 우선 응답이 JSON인지 간단 체크 (정확한 검사)
+            var trimmed = rawResponse.TrimStart();
+            if (!trimmed.StartsWith("{") && !trimmed.StartsWith("["))
+            {
+                // HTML 또는 텍스트 반환 — 프론트에서 바로 보여줘서 원인 파악
+                errorMessage = "서버가 JSON이 아닌 응답을 보냈습니다. (HTML 또는 에러 페이지)";
+                return;
+            }
+
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var result = JsonSerializer.Deserialize<MealResponse>(rawResponse, options);
+
+            meals = result?.mealServiceDietInfo?
+                .FirstOrDefault(info => info.row != null)?.row
+                ?? new List<MealRow>();
+
+            breakfast = meals.FirstOrDefault(m => m.MMEAL_SC_CODE == "1");
+            lunch = meals.FirstOrDefault(m => m.MMEAL_SC_CODE == "2");
+            dinner = meals.FirstOrDefault(m => m.MMEAL_SC_CODE == "3");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"예외 발생: {ex.Message}";
+            rawResponse = rawResponse ?? ex.ToString();
+            Console.WriteLine("예외: " + ex);
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private string? FormatHtml(string? html)
+    {
+        if (string.IsNullOrEmpty(html)) return null;
+        // DDISH_NM에는 <br/>이 들어 있으니 그대로 MarkupString으로 렌더되도록 최소 가공
+        // (필요하면 추가 변환: <br/> -> <br/> 등)
+        return html.Replace("\r\n", "").Replace("<br/>", "<br />");
+    }
+
+    // 모델
+    public class MealResponse
+    {
+        public List<MealServiceDietInfo>? mealServiceDietInfo { get; set; }
+    }
+
+    public class MealServiceDietInfo
+    {
+        public List<Dictionary<string, object>>? head { get; set; }
+        public List<MealRow>? row { get; set; }
+    }
+
+    public class MealRow
+    {
+        public string? MMEAL_SC_CODE { get; set; }
+        public string? MMEAL_SC_NM { get; set; }
+        public string? DDISH_NM { get; set; }
+    }
+}
