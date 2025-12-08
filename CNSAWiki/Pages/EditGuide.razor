@@ -1,0 +1,100 @@
+﻿@page "/edit-guide"
+
+<style>
+    /* h1~h6을 줄바꿈 없이 한 줄에 표시합니다. 필요하면 display:inline-block으로 변경하세요. */
+    h1, h2, h3, h4, h5, h6 {
+        display: inline;
+    }
+
+    /* 코드 블럭 스타일 */
+    code {
+        background: #f2f2f2;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: Consolas, "Courier New", monospace;
+        font-size: 0.95em;
+    }
+
+    pre {
+        background: #f8f8f8;
+        border: 1px solid #e0e0e0;
+        padding: 12px;
+        overflow: auto;
+        border-radius: 6px;
+        font-family: Consolas, "Courier New", monospace;
+        font-size: 0.95em;
+        line-height: 1.5;
+    }
+</style>
+
+<h1><strong>글자 꾸미기</strong></h1>
+<br>
+<p>
+    <strong>글자 사이즈 :</strong> #~###### (개수가 많을수록 작은 글자, 6개까지만 지원)
+    <br>
+    예시 : #크##다###가####작#####아######짐
+    <h1>크</h1><h2>다</h2><h3>가</h3><h4>작</h4><h5>아</h5><h6>짐</h6>
+</p>
+<br>
+<p>
+    <strong>볼드체 :</strong> **텍스트**
+    <br>
+    예시 : **안녕하세요**
+    <br>
+    <strong>안녕하세요</strong>
+</p>
+<br>
+<p>
+    <strong>이탤릭(기울임)체 :</strong> *텍스트*
+    <br>
+    예시 : *큰사위키입니다*
+    <br><em>큰사위키입니다</em>
+</p>
+<br>
+<p>
+    <strong>취소선 :</strong> ~~텍스트~~
+    <br>
+    예시 : ~~아무튼 논란~~
+    <br>
+    <del>아무튼 논란</del>
+</p>
+<br>
+<p>
+    <strong>리스트 기호(점) :</strong> - 또는 * (다른 문법과 겹치지 않도록 작성)
+    <br>
+    예시 : * 항목 1
+    <ul>
+        <li>항목 1</li>
+    </ul>
+</p>
+<br>
+<p>
+    <strong>이미지 삽입 :</strong> ![text](image link)
+    <br>
+    예시: ![고양이](https://cdn.pixabay.com/photo/2019/11/22/03/58/cat-4644008_1280.jpg)
+    <img src="https://cdn.pixabay.com/photo/2019/11/22/03/58/cat-4644008_1280.jpg">
+</p>
+<br>
+<p>
+    <strong>하이퍼링크 삽입 : [text](link)</strong>
+    <br>
+    예시 : [나무위키](https://namu.wiki)
+    <br>
+    <a href="https://namu.wiki">나무위키</a>
+</p>
+<br>
+<p>
+    <strong>코드 블럭 삽입 :</strong> ``` 텍스트 ```
+    <br>
+    예시 :
+    <br>
+    ```**python**
+    <br>
+    print("Hello, World!")```
+    <pre><code><strong>python</strong><br>print("Hello, World!")</code>
+        </pre>
+</p>
+
+@code {
+
+}
